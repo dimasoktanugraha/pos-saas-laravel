@@ -1,0 +1,14 @@
+services:
+  db:
+    image: postgres:15.3
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: possaaspostrgesql
+      POSTGRES_DB: postgres
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+volumes:
+  dbdata:
