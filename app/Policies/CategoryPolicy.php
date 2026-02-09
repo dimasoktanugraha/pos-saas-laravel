@@ -1,66 +1,70 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Policies;
 
+use Illuminate\Foundation\Auth\User as AuthUser;
 use App\Models\Category;
-use App\Models\User;
-use Illuminate\Auth\Access\Response;
+use Illuminate\Auth\Access\HandlesAuthorization;
 
 class CategoryPolicy
 {
-    /**
-     * Determine whether the user can view any models.
-     */
-    public function viewAny(User $user): bool
+    use HandlesAuthorization;
+    
+    public function viewAny(AuthUser $authUser): bool
     {
-        return true;
+        return $authUser->can('ViewAny:Category');
     }
 
-    /**
-     * Determine whether the user can view the model.
-     */
-    public function view(User $user, Category $category): bool
+    public function view(AuthUser $authUser, Category $category): bool
     {
-        return true;
+        return $authUser->can('View:Category');
     }
 
-    /**
-     * Determine whether the user can create models.
-     */
-    public function create(User $user): bool
+    public function create(AuthUser $authUser): bool
     {
-        return $user->isAdmin();
+        return $authUser->can('Create:Category');
     }
 
-    /**
-     * Determine whether the user can update the model.
-     */
-    public function update(User $user, Category $category): bool
+    public function update(AuthUser $authUser, Category $category): bool
     {
-        return $user->isAdmin();
+        return $authUser->can('Update:Category');
     }
 
-    /**
-     * Determine whether the user can delete the model.
-     */
-    public function delete(User $user, Category $category): bool
+    public function delete(AuthUser $authUser, Category $category): bool
     {
-        return $user->isAdmin();
+        return $authUser->can('Delete:Category');
     }
 
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user, Category $category): bool
+    public function restore(AuthUser $authUser, Category $category): bool
     {
-        return $user->isAdmin();
+        return $authUser->can('Restore:Category');
     }
 
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, Category $category): bool
+    public function forceDelete(AuthUser $authUser, Category $category): bool
     {
-        return $user->isAdmin();
+        return $authUser->can('ForceDelete:Category');
     }
+
+    public function forceDeleteAny(AuthUser $authUser): bool
+    {
+        return $authUser->can('ForceDeleteAny:Category');
+    }
+
+    public function restoreAny(AuthUser $authUser): bool
+    {
+        return $authUser->can('RestoreAny:Category');
+    }
+
+    public function replicate(AuthUser $authUser, Category $category): bool
+    {
+        return $authUser->can('Replicate:Category');
+    }
+
+    public function reorder(AuthUser $authUser): bool
+    {
+        return $authUser->can('Reorder:Category');
+    }
+
 }

@@ -1,66 +1,70 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Policies;
 
+use Illuminate\Foundation\Auth\User as AuthUser;
 use App\Models\Outlet;
-use App\Models\User;
-use Illuminate\Auth\Access\Response;
+use Illuminate\Auth\Access\HandlesAuthorization;
 
 class OutletPolicy
 {
-    /**
-     * Determine whether the user can view any models.
-     */
-    public function viewAny(User $user): bool
+    use HandlesAuthorization;
+    
+    public function viewAny(AuthUser $authUser): bool
     {
-        return true;
+        return $authUser->can('ViewAny:Outlet');
     }
 
-    /**
-     * Determine whether the user can view the model.
-     */
-    public function view(User $user, Outlet $outlet): bool
+    public function view(AuthUser $authUser, Outlet $outlet): bool
     {
-        return true;
+        return $authUser->can('View:Outlet');
     }
 
-    /**
-     * Determine whether the user can create models.
-     */
-    public function create(User $user): bool
+    public function create(AuthUser $authUser): bool
     {
-        return $user->isAdmin();
+        return $authUser->can('Create:Outlet');
     }
 
-    /**
-     * Determine whether the user can update the model.
-     */
-    public function update(User $user, Outlet $outlet): bool
+    public function update(AuthUser $authUser, Outlet $outlet): bool
     {
-        return $user->isAdmin();
+        return $authUser->can('Update:Outlet');
     }
 
-    /**
-     * Determine whether the user can delete the model.
-     */
-    public function delete(User $user, Outlet $outlet): bool
+    public function delete(AuthUser $authUser, Outlet $outlet): bool
     {
-        return $user->isAdmin();
+        return $authUser->can('Delete:Outlet');
     }
 
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user, Outlet $outlet): bool
+    public function restore(AuthUser $authUser, Outlet $outlet): bool
     {
-        return $user->isAdmin();
+        return $authUser->can('Restore:Outlet');
     }
 
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, Outlet $outlet): bool
+    public function forceDelete(AuthUser $authUser, Outlet $outlet): bool
     {
-        return $user->isAdmin();
+        return $authUser->can('ForceDelete:Outlet');
     }
+
+    public function forceDeleteAny(AuthUser $authUser): bool
+    {
+        return $authUser->can('ForceDeleteAny:Outlet');
+    }
+
+    public function restoreAny(AuthUser $authUser): bool
+    {
+        return $authUser->can('RestoreAny:Outlet');
+    }
+
+    public function replicate(AuthUser $authUser, Outlet $outlet): bool
+    {
+        return $authUser->can('Replicate:Outlet');
+    }
+
+    public function reorder(AuthUser $authUser): bool
+    {
+        return $authUser->can('Reorder:Outlet');
+    }
+
 }

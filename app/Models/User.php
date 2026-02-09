@@ -7,11 +7,17 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
+use Spatie\Permission\Traits\HasRoles;
+use BezhanSalleh\FilamentShield\Traits\HasPanelShield;
 
-class User extends Authenticatable
+class User extends Authenticatable implements FilamentUser
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, HasApiTokens;
+    use HasRoles;
+    use HasPanelShield;
 
     /**
      * The attributes that are mass assignable.
@@ -54,10 +60,14 @@ class User extends Authenticatable
     }
 
     public function isAdmin(): bool {
-        return $this->is_admin === true;
+        return $this->hasRole('super_admin') || $this->hasRole('admin');
     }
 
     public function canAccessPanel(Panel $panel): bool {
-        return true;
+        if ($this->hasRole('super_admin')) {
+            return true;
+        }
+
+        return $this->hasAnyRole(['admin', 'staff', 'cashier']);
     }
 }
