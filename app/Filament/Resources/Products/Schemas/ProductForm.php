@@ -30,6 +30,12 @@ class ProductForm
                     ->required()
                     ->numeric()
                     ->default(0),
+                TextInput::make('min_stock')
+                    ->label('Minimum Stock')
+                    ->required()
+                    ->numeric()
+                    ->default(10)
+                    ->helperText('Alert akan muncul jika stock <= nilai ini'),
                 FileUpload::make('image')
                     ->label('Product Image')
                     ->image()
